@@ -1,0 +1,23 @@
+# Use the official Node.js image as the base image
+FROM node:18-alpine
+
+# Set the working directory for the frontend app
+WORKDIR /usr/src/app/frontend
+
+# Copy package.json and yarn.lock files for the frontend
+COPY package.json yarn.lock ./
+
+# Install frontend dependencies
+RUN yarn install --frozen-lockfile
+
+# Copy the rest of the Vue.js code
+COPY . .
+
+# Build the Vue.js frontend
+RUN yarn build
+
+# Expose the port for the Vue.js app (if serving directly)
+EXPOSE 8080
+
+# Command to start the Vue.js app (if needed, otherwise remove this line)
+CMD ["yarn", "serve"]

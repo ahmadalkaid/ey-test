@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongodb
+    environment:
+      - DATABASE_URI=mongodb://mongodb:27017/nest
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: yarn start:dev
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend:/usr/src/app
+    environment:
+      - NODE_ENV=development
+volumes:
+  mongo-data:
